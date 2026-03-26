@@ -1,0 +1,51 @@
+﻿
+> capstone-connect@0.1.0 lint
+> eslint
+
+
+D:\capstone project\capstone-connect\src\app\(auth)\login\page.tsx
+   6:10  warning  'Input' is defined but never used                      @typescript-eslint/no-unused-vars
+   7:29  warning  'CardDescription' is defined but never used            @typescript-eslint/no-unused-vars
+   9:18  warning  'Mail' is defined but never used                       @typescript-eslint/no-unused-vars
+   9:24  warning  'Lock' is defined but never used                       @typescript-eslint/no-unused-vars
+  12:31  warning  'signInWithGoogle' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  13:12  warning  'email' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  13:19  warning  'setEmail' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  14:12  warning  'password' is assigned a value but never used          @typescript-eslint/no-unused-vars
+  14:22  warning  'setPassword' is assigned a value but never used       @typescript-eslint/no-unused-vars
+  15:12  warning  'loading' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  15:21  warning  'setLoading' is assigned a value but never used        @typescript-eslint/no-unused-vars
+
+D:\capstone project\capstone-connect\src\app\(dashboard)\feed\create\page.tsx
+  10:21  warning  'Loader2' is defined but never used       @typescript-eslint/no-unused-vars
+  46:25  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+D:\capstone project\capstone-connect\src\app\(dashboard)\feed\page.tsx
+  15:40  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+  21:8   warning  React Hook useEffect has a missing dependency: 'fetchPosts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  24:23  warning  'error' is assigned a value but never used                                                                     @typescript-eslint/no-unused-vars
+  59:25  error    Unexpected any. Specify a different type                                                                       @typescript-eslint/no-explicit-any
+
+D:\capstone project\capstone-connect\src\app\(dashboard)\networks\page.tsx
+   9:34  warning  'Loader2' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+   9:56  warning  'XCircle' is defined but never used                                                                               @typescript-eslint/no-unused-vars
+  22:12  warning  'loading' is assigned a value but never used                                                                      @typescript-eslint/no-unused-vars
+  32:8   warning  React Hook useEffect has a missing dependency: 'fetchAccounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  71:25  error    Unexpected any. Specify a different type                                                                          @typescript-eslint/no-explicit-any
+
+D:\capstone project\capstone-connect\src\app\(dashboard)\platforms\page.tsx
+  24:27  warning  'error' is assigned a value but never used                                                                   @typescript-eslint/no-unused-vars
+  34:8   warning  React Hook useEffect has a missing dependency: 'supabase'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+D:\capstone project\capstone-connect\src\app\(dashboard)\profile\page.tsx
+   26:11  warning  'router' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  103:25  error    Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+
+D:\capstone project\capstone-connect\src\components\feed\PostCard.tsx
+  3:10  warning  'BadgeCheck' is defined but never used  @typescript-eslint/no-unused-vars
+
+D:\capstone project\capstone-connect\src\middleware.ts
+  20:58  warning  'options' is defined but never used  @typescript-eslint/no-unused-vars
+
+Γ£û 28 problems (5 errors, 23 warnings)
+
