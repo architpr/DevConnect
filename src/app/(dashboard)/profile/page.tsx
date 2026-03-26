@@ -133,67 +133,91 @@ export default function ProfilePage() {
         let ghStats: GitHubStats | null = null
         let gfStats: GFGStats | null = null
 
+        const fetchWithTimeout = async (url: string, options: RequestInit = {}, timeout = 25000) => {
+            const controller = new AbortController()
+            const id = setTimeout(() => controller.abort(), timeout)
+            try {
+                const response = await fetch(url, { ...options, signal: controller.signal })
+                clearTimeout(id)
+                return response
+            } catch (err) {
+                clearTimeout(id)
+                throw err
+            }
+        }
+
+        const promises = []
+
         // LeetCode
         const leetcodeAccount = accounts.find(a => a.platform === 'leetcode')
         if (leetcodeAccount) {
-            try {
-                const res = await fetch(`/api/stats/leetcode?username=${leetcodeAccount.platform_username}`)
-                if (res.ok) {
-                    const data = await res.json()
-                    if (!data.error) { setLeetcodeStats(data); lcStats = data }
-                }
-            } catch { }
+            promises.push((async () => {
+                try {
+                    const res = await fetchWithTimeout(`/api/stats/leetcode?username=${leetcodeAccount.platform_username}`)
+                    if (res.ok) {
+                        const data = await res.json()
+                        if (!data.error) { setLeetcodeStats(data); lcStats = data }
+                    }
+                } catch { }
+            })())
         }
 
         // GitHub
         const githubAccount = accounts.find(a => a.platform === 'github')
         if (githubAccount) {
-            try {
-                const res = await fetch(`/api/stats/github?username=${githubAccount.platform_username}`)
-                if (res.ok) {
-                    const data = await res.json()
-                    if (!data.error) { setGithubStats(data); ghStats = data }
-                }
-            } catch { }
+            promises.push((async () => {
+                try {
+                    const res = await fetchWithTimeout(`/api/stats/github?username=${githubAccount.platform_username}`)
+                    if (res.ok) {
+                        const data = await res.json()
+                        if (!data.error) { setGithubStats(data); ghStats = data }
+                    }
+                } catch { }
+            })())
         }
 
         // GFG
         const gfgAccount = accounts.find(a => a.platform === 'geeksforgeeks')
         if (gfgAccount) {
-            try {
-                const res = await fetch(`/api/stats/gfg?username=${gfgAccount.platform_username}`)
-                if (res.ok) {
-                    const data = await res.json()
-                    if (!data.error) { setGfgStats(data); gfStats = data }
-                }
-            } catch { }
+            promises.push((async () => {
+                try {
+                    const res = await fetchWithTimeout(`/api/stats/gfg?username=${gfgAccount.platform_username}`)
+                    if (res.ok) {
+                        const data = await res.json()
+                        if (!data.error) { setGfgStats(data); gfStats = data }
+                    }
+                } catch { }
+            })())
         }
 
         // Resume Analysis
         if (resumeUrl) {
-            try {
-                const res = await fetch('/api/resume/analyze', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ resumeUrl })
-                })
-                const data = await res.json()
-                if (res.ok && !data.error) {
-                    setResumeAnalysis(data)
-                    setResumeAnalysisError(null)
-                } else {
+            promises.push((async () => {
+                try {
+                    const res = await fetchWithTimeout('/api/resume/analyze', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ resumeUrl })
+                    }, 40000)
+                    const data = await res.json()
+                    if (res.ok && !data.error) {
+                        setResumeAnalysis(data)
+                        setResumeAnalysisError(null)
+                    } else {
+                        setResumeAnalysis(null)
+                        setResumeAnalysisError(data?.error || 'Unable to analyze this file as a resume.')
+                    }
+                } catch {
                     setResumeAnalysis(null)
-                    setResumeAnalysisError(data?.error || 'Unable to analyze this file as a resume.')
+                    setResumeAnalysisError('Unable to analyze resume right now. Please try again.')
                 }
-            } catch {
-                setResumeAnalysis(null)
-                setResumeAnalysisError('Unable to analyze resume right now. Please try again.')
-            }
+            })())
         } else {
             setResumeAnalysis(null)
             setResumeAnalysisError(null)
         }
 
+        await Promise.allSettled(promises)
         setStatsLoading(false)
 
         // Fetch AI Profile Insights with collected stats
@@ -739,7 +763,7 @@ export default function ProfilePage() {
                                                 className="hidden"
                                             />
                                             <label htmlFor="resume-upload-update" className={uploading ? "pointer-events-none" : "cursor-pointer"}>
-                                                <Button type="button" variant="outline" isLoading={uploading} className="gap-2">
+                                                <Button type="button" variant="outline" isLoading={uploading} className="gap-2" onClick={() => document.getElementById('resume-upload-update')?.click()}>
                                                     <Upload className="h-4 w-4" />
                                                     Update
                                                 </Button>
@@ -757,7 +781,7 @@ export default function ProfilePage() {
                                             className="hidden"
                                         />
                                         <label htmlFor="resume-upload-new" className={uploading ? "pointer-events-none" : "cursor-pointer"}>
-                                            <Button type="button" className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600" isLoading={uploading}>
+                                            <Button type="button" className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600" isLoading={uploading} onClick={() => document.getElementById('resume-upload-new')?.click()}>
                                                 <Upload className="h-4 w-4" />
                                                 Upload Resume
                                             </Button>
